@@ -1,0 +1,13 @@
+.emptyContainer {
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    font-size: 1.5rem;
+    background: rgba(18, 18, 18, 0.03);
+    color: rgba(0, 0, 0, 0.62);
+    justify-content: center;
+    align-items: center;
+    /* padding-left: -4%; */
+};

@@ -1,0 +1,82 @@
+.hidden {
+  /* display: none; */
+
+  overflow: hidden;
+  height: 0;
+}
+
+.paneTitle {
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: var(--font-size-medium);
+  font-weight: var(--text-weight-bold);
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+  margin-bottom: 12px;
+
+  & span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.branding_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 10px;
+}
+
+.logo {
+  max-width: 100px;
+  max-height: 100px;
+  text-align: center;
+  justify-content: center;
+
+  & img {
+    max-width: 100px;
+    max-height: 100px;
+  }
+}
+
+.org {
+  max-width: 70px;
+  text-align: center;
+  justify-content: center;
+
+  & img {
+    max-width: 70px;
+    max-height: 70px;
+  }
+}
+
+.report_content {
+  position: relative;
+  margin: 0 20px;
+  width: inherit;
+  height: inherit;
+}
+
+.divider {
+  margin-bottom: 8px;
+  background-color: brown;
+}
+
+.footer_container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}

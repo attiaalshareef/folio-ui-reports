@@ -1,0 +1,26 @@
+.emptyContainer {
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    font-size: 1.5rem;
+    background: rgba(18, 18, 18, 0.03);
+    /* color: rgba(0, 0, 0, 0.62); */
+    justify-content: center;
+    align-items: center;
+    /* padding-left: -4%; */
+};
+
+.errorMessage {
+    display: flex;
+    text-align: justify;
+    line-height: 1.4;
+    /* font-weight: bold; */
+    padding: 10px;
+    border: 1.5px solid rgb(89, 28, 203);
+    background-color: #ffffff;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.62);
+    /* margin-bottom: 10px; */
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Reports and analytics folio backend module",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "string"
+    },
+    "status": {
+      "description": "Status of the report, you can choose between active or inactive",
+      "type": "string"
+    },
+    "privacyType": {
+      "description": "Privacy of the report, you can choose between public or private types",
+      "type": "string"
+    },
+    "reportType": {
+      "description": "types of reports, you can select one of ['Single Metric', 'Multi Metric', 'Periodical Metric','Sorted List']",
+      "type": "string"
+    },
+    "displayMethods": {
+      "description": "You can select one of ['Table', 'Numeric', 'BarChart', 'PieChart', 'LineChart', 'AreaChart']",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "displaySettings": {
+            "description": "Report display method based on its type",
+            "type": "object"
+          }
+        }
+      }
+    },
+    "defaultDisplayMethod": {
+      "type": "string"
+    },
+    "authorizedUsers": {
+      "description": "If the report privacy type is a private, you must authorize users to mange the report",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "role": {
+            "description": "You can select one of ['Owner', 'Admin', 'Viewer', 'Editor']",
+            "type": "string"
+          },
+          "permissions": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "queryMetadata": {
+      "type": "object"
+    },
+    "queryString": {
+      "type": "object"
+    },
+    "queryParams": {
+      "description": "If the query contains filters, you can save it as a prams, so you can filter the results in the report view mode",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "fieldName": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "defaultValue": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "viewSettings": {
+      "description": "General viewing settings",
+      "type": "object"
+    },
+    "metadata": {
+      "type": "object",
+      "$ref": "raml-util/schemas/metadata.schema",
+      "readonly": true
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "desc",
+    "status",
+    "reportType",
+    "privacyType",
+    "queryMetadata",
+    "queryString"
+  ]
+}

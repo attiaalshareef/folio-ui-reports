@@ -1,0 +1,197 @@
+@import '@folio/stripes-components/lib/variables.css';
+
+/* ===== LAYOUT CONTAINERS ===== */
+.appContainer {
+  display: flex;
+  flex-direction: row;
+  height: 92vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.mainContent {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== SIDE MENU ===== */
+.sideMenu {
+  background-color: #000000cc;
+  padding: 0;
+  transition: width 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sideMenu.collapsed {
+  width: 80px;
+}
+
+.sideMenu.expanded {
+  width: 200px;
+}
+
+/* ===== EXPAND TOGGLE ===== */
+.expandToggleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.expandToggle {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none !important;
+  border: none !important;
+}
+
+.expandToggle:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.expandToggle:hover {
+  opacity: 0.8;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.toggleIcon {
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.toggleIcon:hover {
+  transform: scale(1.1);
+}
+
+/* ===== TABS CONTAINER ===== */
+.tabsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tabBtn {
+  width: 100%;
+  padding: 15px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  position: relative;
+  outline: none !important;
+  border: none !important;
+}
+
+.tabBtn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.tabBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.tabBtn.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-left: 4px solid white;
+}
+
+.tabContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  width: 100%;
+}
+
+.tabContent.expanded {
+  justify-content: flex-start;
+}
+
+.tabIcon {
+  color: white;
+  min-width: 20px;
+}
+
+.tabLabel {
+  margin-left: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ===== RTL SUPPORT ===== */
+
+[dir='rtl'] .tabBtn.active {
+  border-left: none;
+  border-right: 4px solid white;
+}
+
+[dir='rtl'] .tabContent.expanded {
+  justify-content: flex-start;
+  flex-direction: row;
+}
+
+[dir='rtl'] .tabLabel {
+  margin-left: 0;
+  margin-right: 12px;
+}
+
+/* ===== FOLIO OVERRIDES - Scoped to this app only ===== */
+.mainContent [class*='paneset'] {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* Root fix: Change max-height to respect container bounds */
+.mainContent [data-test-pane-id],
+.mainContent .pane {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  max-height: 100% !important; /* Instead of 100vh or calc(100vh - 44px) */
+  height: 100% !important;
+}
+
+.mainContent .pane > [class*='paneContent'] {
+  overflow-y: auto !important;
+  height: 100% !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .sideMenu {
+    min-width: 60px;
+  }
+
+  .tabBtn {
+    padding: 12px 8px;
+  }
+
+  /* Optimization for small screens */
+  .appContainer {
+    height: 88vh; /* Slightly less for mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .appContainer {
+    height: 85vh; /* Even less for very small screens */
+  }
+}

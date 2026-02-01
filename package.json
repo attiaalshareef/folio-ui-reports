@@ -1,0 +1,136 @@
+{
+  "name": "@folio/reports",
+  "version": "1.1.0",
+  "description": "FOLIO reporting app based on cube.js",
+  "main": "src/index.js",
+  "repository": "",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=12.20.1"
+  },
+  "scripts": {
+    "start": "stripes serve",
+    "build": "stripes build --output ./output",
+    "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > folio_reports-1.1.0.json ",
+    "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-reports ./translations/ui-reports/compiled",
+    "lint": "eslint .",
+    "test": "jest",
+    "okapi-add": "stripes mod add --okapi https://okapi.kwaretech.com",
+    "okapi-update": "stripes mod update --okapi https://okapi.kwaretech.com",
+    "tenant-enable": "stripes mod enable --tenant kware --okapi https://okapi.kwaretech.com",
+    "extract-trans-keys": "formatjs extract \"src/**/*.js\" --ignore='**/*.json' --out-file translations/ui-reports/en.json --format formatter.js && node updateArKeys.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/eslint-parser": "^7.15.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.9.0",
+    "@jest/globals": "^26.6.2",
+    "@testing-library/dom": "^7.26.3",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.1.10",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "jest-canvas-mock": "^2.3.0",
+    "jest-junit": "^12.0.0",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "@bigtest/interactor": "^0.9.1",
+    "@bigtest/mocha": "^0.5.2",
+    "@bigtest/react": "^0.1.2",
+    "@folio/eslint-config-stripes": "^6.5.0",
+    "@folio/stripes": "^9.1.8",
+    "@folio/stripes-cli": "^3.1.0",
+    "@folio/stripes-components": "^12.1.2",
+    "@folio/stripes-core": "^10.1.4",
+    "@formatjs/cli": "^4.2.20",
+    "babel-eslint": "^10.0.3",
+    "chai": "^4.2.0",
+    "core-js": "^3.6.4",
+    "eslint": "^6.2.1",
+    "faker": "^4.1.0",
+    "inflected": "^2.0.4",
+    "miragejs": "^0.1.40",
+    "mocha": "^9.0.0",
+    "query-string": "^5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-intl": "^6.4.7",
+    "@tanstack/react-query": "^4.29.0",
+    "react-router-dom": "^5.2.0",
+    "regenerator-runtime": "^0.13.3"
+  },
+  "dependencies": {
+    "@cubejs-client/core": "^1.3.11",
+    "@cubejs-client/react": "^1.3.11",
+    "@cubejs-client/ws-transport": "^1.3.11",
+    "react-grid-layout": "^1.5.1",
+    "react-draggable": "^4.4.6",
+    "react-resizable": "^3.0.5",
+    "react-icons": "^4.6.0",
+    "react-to-print": "^3.0.2",
+    "react-to-pdf": "2.0.0",
+    "html2canvas": "1.4.1",
+    "jspdf": "3.0.1",
+    "recharts": "^2.1.13",
+    "classnames": "^2.2.5",
+    "final-form": "^4.18.2",
+    "final-form-arrays": "^3.0.1",
+    "lodash": "^4.17.4",
+    "prop-types": "^15.6.0",
+    "react-barcode": "1.5.3",
+    "react-beautiful-dnd": "^13.1.0",
+    "react-final-form": "^6.3.0",
+    "react-final-form-arrays": "^3.1.0",
+    "react-final-form-listeners": "^1.0.3",
+    "react-router-prop-types": "^1.0.5",
+    "uuid": "11.1.0",
+    "exceljs": "^4.4.0"
+  },
+  "peerDependencies": {
+    "@folio/stripes": "~9.1.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@tanstack/react-query": "^4.29.0",
+    "react-router-dom": "^5.2.0"
+  },
+  "optionalDependencies": {
+    "@folio/plugin-find-user": "^7.0.0"
+  },
+  "stripes": {
+    "actsAs": [
+      "app",
+      "settings"
+    ],
+    "displayName": "ui-reports.meta.title",
+    "route": "/reports",
+    "okapiInterfaces": {},
+    "icons": [
+      {
+        "name": "app",
+        "alt": "Create, view and manage folio reports",
+        "title": "Reports"
+      }
+    ],
+    "permissionSets": [
+      {
+        "permissionName": "module.reports.enabled",
+        "displayName": "UI: ui-reports module is enabled",
+        "visible": true
+      },
+      {
+        "permissionName": "settings.reports.enabled",
+        "displayName": "Settings (reports): display list of settings pages",
+        "subPermissions": [
+          "settings.enabled",
+          "reports.all"
+        ],
+        "visible": true
+      }
+    ]
+  }
+}

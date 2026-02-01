@@ -1,0 +1,14 @@
+.cardHeader {
+    font-weight: bold;
+}
+
+.layout {
+    text-align: justify;
+    line-height: 1.4;
+    /* font-weight: bold; */
+    padding: 10px;
+    border: 1.5px solid rgb(89, 28, 203);
+    background-color: #ffffff;
+    align-items: center;
+    /* margin-bottom: 10px; */
+}
