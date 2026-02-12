@@ -82,8 +82,10 @@ function SaveNewReportForm({
               id="clickable-closeAndSaveBtn-reports"
               marginBottom0
               type="submit"
-              onClick={() => {
-                handleSubmit();
+              onClick={async (e) => {
+                e.preventDefault();
+                await handleSubmit();
+                form.reset();
                 handleClose();
               }}
               disabled={pristine || submitting}
