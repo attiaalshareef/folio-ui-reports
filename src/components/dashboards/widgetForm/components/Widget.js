@@ -85,29 +85,27 @@ function Widget({ widget, index, onDeleteWidget, currentDashboard }) {
   };
 
   return (
-    <Col xs={widgetType === 'multiReports' ? 12 : 6}>
-      <Card
-        id={`card-new-widget-${index}`}
-        cardClass={css.cardClass}
-        headerClass={css.headerClass}
-        roundedBorder
-        headerStart={
-          <Icon icon={widgetType === 'multiReports' ? 'duplicate' : 'report'}>
-            {widget?.name}
-          </Icon>
-        }
-        headerEnd={
-          <WidgetActionsMenu 
-            onDeleteWidget={onDeleteWidget} 
-            widget={widget}
-            currentDashboard={currentDashboard}
-          />
-        }
-        marginBottom0
-      >
-        {renderWidgetContent()}
-      </Card>
-    </Col>
+    <Card
+      id={`card-new-widget-${index}`}
+      cardClass={css.cardClass}
+      headerClass={css.headerClass}
+      roundedBorder
+      headerStart={
+        <Icon icon={widgetType === 'multiReports' ? 'duplicate' : 'report'}>
+          {widget?.name}
+        </Icon>
+      }
+      headerEnd={
+        <WidgetActionsMenu 
+          onDeleteWidget={onDeleteWidget} 
+          widget={widget}
+          currentDashboard={currentDashboard}
+        />
+      }
+      marginBottom0
+    >
+      {renderWidgetContent()}
+    </Card>
   );
 }
 

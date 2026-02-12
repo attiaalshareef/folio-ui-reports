@@ -26,9 +26,10 @@ function DashboardWidgets(props) {
   }, [defaultDashboard]);
 
   useEffect(() => {
-    const nextWidgets = sortBy((props.resources.widgets || {}).records || [], [
-      '',
-    ])?.filter((widget) => widget.dashboardId === currentDashboard.id);
+    const nextWidgets = sortBy(
+      (props.resources.widgets || {}).records || [], 
+      ['order', 'name']
+    )?.filter((widget) => widget.dashboardId === currentDashboard.id);
 
     if (!isEqual(nextWidgets, widgetsList)) {
       setWidgetsList(nextWidgets);
@@ -92,15 +93,25 @@ function DashboardWidgets(props) {
         ) : (
           <div style={{ padding: '20px' }}>
             <Row>
-              {widgetsList?.map((widget, index) => (
-                <Widget
-                  key={widget.id}
-                  widget={widget}
-                  index={index}
-                  onDeleteWidget={onDeleteWidget}
-                  currentDashboard={currentDashboard}
-                />
-              ))}
+              {widgetsList?.map((widget, index) => {
+                const widgetType = widget?.reportsIds?.length > 1 ? 'multiReports' : 'singleReport';
+                return (
+                  <Col 
+                    key={widget.id}
+                    xs={12}
+                    sm={widgetType === 'multiReports' ? 12 : 6}
+                    md={widgetType === 'multiReports' ? 12 : 6}
+                    lg={widgetType === 'multiReports' ? 12 : 4}
+                  >
+                    <Widget
+                      widget={widget}
+                      index={index}
+                      onDeleteWidget={onDeleteWidget}
+                      currentDashboard={currentDashboard}
+                    />
+                  </Col>
+                );
+              })}
             </Row>
           </div>
         )}
