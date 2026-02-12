@@ -72,6 +72,9 @@ function WidgetFormManager(props) {
         }
       };
       
+      console.log('Creating/Updating widget with data:', widgetData);
+      console.log('Current dashboard:', currentDashboard);
+      
       if (isEditMode && widgetId) {
         await props.mutator.widget.PUT({ ...widgetData, id: widgetId });
         calloutRef.current?.sendCallout({
