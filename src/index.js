@@ -73,18 +73,23 @@ function Reports(props) {
                   <Switch>
                     <Redirect exact from={path} to={`${path}/dashboards`} />
                     <Route
+                      path={`${path}/dashboards/:id`}
+                      exact
+                      component={DashboardsRoute}
+                    />
+                    <Route
                       path={`${path}/dashboards`}
                       exact
                       component={DashboardsRoute}
                     />
 
                     <Route
-                      path={`${path}/dashboards/:dashName/widgets/create`}
+                      path={`${path}/dashboards/:id/widgets/create`}
                       exact
                       component={WidgetFormRoute}
                     />
                     <Route
-                      path={`${path}/dashboards/:dashName/:widgetId/edit`}
+                      path={`${path}/dashboards/:id/:widgetId/edit`}
                       component={WidgetFormRoute}
                     />
 
