@@ -53,7 +53,12 @@ function AddToDashboard({ dashboards }) {
         header={FilterAccordionHeader}
       >
         <FieldArray
-          addLabel="Add to dashboard"
+          addLabel={
+            <FormattedMessage
+              id="ui-reports.newReport.saveReportPane.addToDashboard.addButton"
+              defaultMessage="Add to dashboard"
+            />
+          }
           component={RepeatableField}
           name="dashboards"
           onAdd={(fields) => fields.push('')}

@@ -50,7 +50,12 @@ function AddToCategory({ categories = [] }) {
         header={FilterAccordionHeader}
       >
         <FieldArray
-          addLabel="Add to category"
+          addLabel={
+            <FormattedMessage
+              id="ui-reports.newReport.saveReportPane.addToCategory.addButton"
+              defaultMessage="Add to category"
+            />
+          }
           component={RepeatableField}
           name="categories"
           onAdd={(fields) => fields.push('')}

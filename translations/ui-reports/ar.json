@@ -601,5 +601,20 @@
  "saveNewReportForm.authorizedUsers.role.editor": "محرر",
  "saveNewReportForm.authorizedUsers.role.viewer": "مشاهد",
  "saveNewReportForm.viewSettings.displayMethods": "طرق العرض",
- "saveNewReportForm.viewSettings.defaultDisplayMethod": "طريقة العرض الافتراضية"
+ "saveNewReportForm.viewSettings.defaultDisplayMethod": "طريقة العرض الافتراضية",
+ "ui-reports.newReport.fields.displayMethods.label": "طرق العرض",
+ "ui-reports.newReport.fields.displayMethods.placeholder": "اختر طرق العرض",
+ "ui-reports.newReport.fields.defaultDisplayMethod.label": "طريقة العرض الافتراضية",
+ "ui-reports.newReport.fields.defaultDisplayMethod.placeholder": "اختر طريقة العرض الافتراضية",
+ "ui-reports.newReport.saveReportPane.AuthorizedUsers.accordion.header": "المستخدمون المصرح لهم",
+ "ui-reports.newReport.saveReportPane.AuthorizedUsers.addUser": "إضافة مستخدم",
+ "ui-reports.newReport.saveReportPane.AuthorizedUsers.noUsers": "لا يوجد مستخدمون مصرح لهم",
+ "ui-reports.authorizedUsers.userName": "المستخدم",
+ "ui-reports.authorizedUsers.role": "الدور",
+ "ui-reports.authorizedUsers.role.owner": "مالك",
+ "ui-reports.authorizedUsers.role.admin": "مدير",
+ "ui-reports.authorizedUsers.role.editor": "محرر",
+ "ui-reports.authorizedUsers.role.viewer": "مشاهد",
+ "ui-reports.newReport.saveReportPane.addToCategory.addButton": "إضافة إلى فئة",
+ "ui-reports.newReport.saveReportPane.addToDashboard.addButton": "إضافة إلى لوحة تحكم"
 }
