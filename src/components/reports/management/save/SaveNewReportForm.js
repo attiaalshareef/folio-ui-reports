@@ -35,7 +35,8 @@ function SaveNewReportForm({
   selectedReportType,
   setSelectedReportType,
   queryParams,
-  categories
+  categories,
+  dashboards
 }) {
   const renderPaneFooter = () => {
     return (
@@ -126,7 +127,7 @@ function SaveNewReportForm({
             <QueryParams queryParams={queryParams} />
             <AuthorizedUsers />
             <AddToCategory categories={categories} />
-            <AddToDashboard />
+            <AddToDashboard dashboards={dashboards} />
             <ViewSettings reportDisplayMethods={reportDisplayMethods} />
           </form>
         </Pane>
@@ -152,7 +153,8 @@ SaveNewReportForm.propTypes = {
   selectedReportType: PropTypes.string,
   setSelectedReportType: PropTypes.func,
   queryParams: PropTypes.arrayOf(PropTypes.object),
-  categories: PropTypes.arrayOf(PropTypes.object)
+  categories: PropTypes.arrayOf(PropTypes.object),
+  dashboards: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default stripesFinalForm({

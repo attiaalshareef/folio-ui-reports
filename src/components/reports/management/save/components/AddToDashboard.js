@@ -12,8 +12,13 @@ import {
 } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
 
-function AddToDashboard(props) {
+function AddToDashboard({ dashboards }) {
   const [filterToggle, setFilterToggle] = useState(true);
+
+  const dashboardOptions = (dashboards || []).map(dashboard => ({
+    value: dashboard.id,
+    label: dashboard.name
+  }));
 
   const renderDashboardsList = (field, index) => {
     return (
@@ -27,7 +32,7 @@ function AddToDashboard(props) {
             />
           }
           name={`${field}.values`}
-          //   disabled={disabled}
+          dataOptions={dashboardOptions}
         />
       </>
     );
@@ -59,6 +64,8 @@ function AddToDashboard(props) {
   );
 }
 
-AddToDashboard.propTypes = {};
+AddToDashboard.propTypes = {
+  dashboards: PropTypes.arrayOf(PropTypes.object)
+};
 
 export default AddToDashboard;

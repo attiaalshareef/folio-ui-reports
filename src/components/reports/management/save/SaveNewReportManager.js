@@ -130,6 +130,7 @@ function SaveNewReportManager({
         setSelectedReportType={setSelectedReportType}
         queryParams={queryParams}
         categories={resources.categories?.records || []}
+        dashboards={resources.dashboards?.records || []}
       />
     </>
   );
@@ -182,6 +183,11 @@ SaveNewReportManager.manifest = Object.freeze({
     type: 'okapi',
     records: 'categories',
     path: 'categories?limit=1000',
+  },
+  dashboards: {
+    type: 'okapi',
+    records: 'dashboards',
+    path: 'dashboards?limit=1000',
   },
 });
 
