@@ -34,6 +34,7 @@ function SaveNewReportForm({
   reportDisplayMethods,
   selectedReportType,
   setSelectedReportType,
+  queryParams,
   categories
 }) {
   const renderPaneFooter = () => {
