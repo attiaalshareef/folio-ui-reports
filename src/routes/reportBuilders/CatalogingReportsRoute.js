@@ -49,7 +49,7 @@ function CatalogingReportsRoute(props) {
         resultSet={resultSet}
         error={error}
         isLoading={isLoading}
-        reportType="cataloging"
+        reportType="statistical"
         displayMethod={displayMethod}
         setDisplayMethod={setDisplayMethod}
       />
@@ -62,7 +62,7 @@ function CatalogingReportsRoute(props) {
         setShowSavePane={setShowSavePane}
         handleClose={handleClose}
         query={currentQuery}
-        reportType="cataloging"
+        reportType="statistical"
       />
     </Paneset>
   );

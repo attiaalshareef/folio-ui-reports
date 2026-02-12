@@ -11,7 +11,7 @@ import useCubeQuery from '../../hooks/useQuery';
 
 function QueryBuilderRoute(props) {
   const cubejsApi = useContext(CubeContext);
-  const [reportType, setReportType] = useURLParams('rt', 'dimMetric');
+  const [reportType, setReportType] = useURLParams('rt', 'statistical');
 
   const [displayMethod, setDisplayMethod] = useURLParams('dm', 'table');
   // const [selectedTables, setSelectedTables] = useURLParams('st', '');

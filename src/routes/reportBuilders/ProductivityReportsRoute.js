@@ -52,7 +52,7 @@ function ProductivityReportsRoute(props) {
         resultSet={resultSet}
         error={error}
         isLoading={isLoading}
-        reportType="productivity"
+        reportType="performance"
         displayMethod={displayMethod}
         setDisplayMethod={setDisplayMethod}
       />
@@ -65,7 +65,7 @@ function ProductivityReportsRoute(props) {
         setShowSavePane={setShowSavePane}
         handleClose={handleClose}
         query={currentQuery}
-        reportType="productivity"
+        reportType="performance"
       />
     </Paneset>
   );

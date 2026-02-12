@@ -49,7 +49,7 @@ function CirculationReportsRoute(props) {
         resultSet={resultSet}
         error={error}
         isLoading={isLoading}
-        reportType="circulation"
+        reportType="statistical"
         displayMethod={displayMethod}
         setDisplayMethod={setDisplayMethod}
       />
@@ -62,7 +62,7 @@ function CirculationReportsRoute(props) {
         setShowSavePane={setShowSavePane}
         handleClose={handleClose}
         query={currentQuery}
-        reportType="circulation"
+        reportType="statistical"
       />
     </Paneset>
   );

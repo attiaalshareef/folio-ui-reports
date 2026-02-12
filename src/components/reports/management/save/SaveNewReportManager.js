@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { stripesConnect } from '@folio/stripes-core';
 import { useIntl } from 'react-intl';
 import SaveNewReportForm from './SaveNewReportForm';
-import useReportTypes from '../../../../hooks/useReportTypes';
 import useQueryString from '../../../../hooks/useQueryString';
 import useDryQuery from '../../../../hooks/useDryQuery';
 import displayMethodsConfig from '../../../../constants/DisplayMethods';
+import reportTypesConfig, { getReportType, getDisplayMethodsForType } from '../../../../constants/ReportsTypes';
 
 function SaveNewReportManager({
   showQueryBuilderPane,
@@ -25,8 +25,14 @@ function SaveNewReportManager({
   const [queryMeta] = useDryQuery(query);
   const intl = useIntl();
 
-  console.log('reportDisplayMethods:', reportDisplayMethods);
-  console.log('reportTypeRecord:', reportTypeRecord);
+  // Get report type configuration using new system
+  const currentReportType = getReportType(reportType);
+  
+  // Get display methods for this report type
+  const displayMethodValues = getDisplayMethodsForType(reportType);
+  const availableDisplayMethods = displayMethodValues.map(methodValue => 
+    displayMethodsConfig.find(dm => dm.value === methodValue)
+  ).filter(Boolean);
 
   // Generate queryParams from current query filters
   const queryParams = queryMeta?.filters?.map((filter) => ({
@@ -83,8 +89,8 @@ function SaveNewReportManager({
           reportStatus: 'active',
           privacyType: 'public',
           reportType,
-          displayMethods: (reportDisplayMethods || []).map((method) => method?.value).filter(Boolean),
-          defaultDisplayMethod: reportTypeRecord?.defaultDisplayMethod,
+          displayMethods: availableDisplayMethods.map((method) => method.value),
+          defaultDisplayMethod: currentReportType.defaultDisplayMethod,
           authorizedUsers: [],
           queryMetadata: '',
           queryString: '',
@@ -111,8 +117,8 @@ function SaveNewReportManager({
         showSavePane={showSavePane}
         setShowSavePane={setShowSavePane}
         handleClose={handleClose}
-        reportTypeRecord={reportTypeRecord}
-        reportDisplayMethods={reportDisplayMethods || []}
+        reportTypeRecord={currentReportType}
+        reportDisplayMethods={availableDisplayMethods}
         queryParams={queryParams}
         categories={resources.categories?.records || []}
       />
