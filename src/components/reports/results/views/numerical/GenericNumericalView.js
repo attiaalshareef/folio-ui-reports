@@ -13,13 +13,11 @@ function GenericNumericalView({
     return <EmptyData />;
   }
 
-  // Get the first measure value
   const data = resultSet.loadResponses?.[0]?.data?.[0];
   if (!data) {
     return <EmptyData />;
   }
 
-  // Find the first numeric value
   const numericValue = Object.values(data).find(value => 
     typeof value === 'number' || !isNaN(Number(value))
   );
@@ -35,15 +33,15 @@ function GenericNumericalView({
   const label = customLabel || Object.keys(data)[0] || 'Value';
 
   return (
-    <div className={css.numericalContainer}>
-      <div className={`${css.numericalValue} ${css[displayFormat]}`}>
-        {formattedValue}
-      </div>
+    <div className={css.card}>
       {showLabel && (
-        <div className={css.numericalLabel}>
+        <div className={css.cardHeader}>
           {label}
         </div>
       )}
+      <div className={css.cardBody}>
+        {formattedValue}
+      </div>
     </div>
   );
 }
