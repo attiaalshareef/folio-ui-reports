@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-escape */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { stripesConnect } from '@folio/stripes-core';
 import { useIntl } from 'react-intl';
@@ -42,13 +42,43 @@ function SaveNewReportManager({
   }, [selectedReportType]);
 
   // Generate queryParams from current query filters
-  const queryParams = queryMeta?.filters?.map((filter) => ({
+  const queryParams = useMemo(() => queryMeta?.filters?.map((filter) => ({
     fieldName: filter.member,
     operator: filter.operator,
     defaultValue: filter.values?.[0] || null,
     required: false,
     description: `Filter for ${filter.member}`,
-  })) || [];
+  })) || [], [queryMeta]);
+
+  const initialValues = useMemo(() => ({
+    reportName: '',
+    reportDesc: '',
+    reportStatus: 'active',
+    privacyType: 'public',
+    reportType: 'statistical',
+    displayMethods: [],
+    defaultDisplayMethod: '',
+    authorizedUsers: [],
+    queryMetadata: '',
+    queryString: '',
+    queryParams,
+    categories: [],
+    viewSettings: {
+      table: {
+        columnWidths: {},
+        columnMapping: {},
+        visibleColumns: [],
+        translatableFields: [
+          {
+            fieldName: '',
+            keyPattern: '',
+          },
+        ],
+      },
+      numLabel: {},
+      barChart: {},
+    },
+  }), [queryParams]);
 
   const onFormSubmit = (values) => {
     // Transform displayMethods to match backend schema
@@ -90,35 +120,7 @@ function SaveNewReportManager({
     <>
       <SaveNewReportForm
         onSubmit={onFormSubmit}
-        initialValues={{
-          reportName: '',
-          reportDesc: '',
-          reportStatus: 'active',
-          privacyType: 'public',
-          reportType: 'statistical',
-          displayMethods: [],
-          defaultDisplayMethod: '',
-          authorizedUsers: [],
-          queryMetadata: '',
-          queryString: '',
-          queryParams,
-          categories: [],
-          viewSettings: {
-            table: {
-              columnWidths: {},
-              columnMapping: {},
-              visibleColumns: [],
-              translatableFields: [
-                {
-                  fieldName: '',
-                  keyPattern: '',
-                },
-              ],
-            },
-            numLabel: {},
-            barChart: {},
-          },
-        }}
+        initialValues={initialValues}
         showQueryBuilderPane={showQueryBuilderPane}
         setShowQueryBuilderPane={setShowQueryBuilderPane}
         showSavePane={showSavePane}

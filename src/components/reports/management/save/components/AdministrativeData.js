@@ -105,14 +105,32 @@ function AdministrativeData({ reportTypeRecord, selectedReportType, setSelectedR
                 defaultMessage: 'Select report type'
               })}
               dataOptions={reportTypeOptions}
-              onChange={(e) => {
-                const newType = e.target.value;
-                setSelectedReportType(newType);
-                form.change('reportType', newType);
-              }}
               required
               validate={required}
-            />
+            >
+              {({ input }) => (
+                <Select
+                  {...input}
+                  id="save-new-form-report-type-select"
+                  label={
+                    <FormattedMessage
+                      id="ui-reports.saveNewReportForm.reportTypeField.label"
+                      defaultMessage="Report type"
+                    />
+                  }
+                  placeholder={intl.formatMessage({
+                    id: 'ui-reports.saveNewReportForm.reportTypeField.placeholder',
+                    defaultMessage: 'Select report type'
+                  })}
+                  dataOptions={reportTypeOptions}
+                  onChange={(e) => {
+                    input.onChange(e);
+                    setSelectedReportType(e.target.value);
+                  }}
+                  required
+                />
+              )}
+            </Field>
           </Col>
         </Row>
         <Row>
