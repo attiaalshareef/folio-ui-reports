@@ -1,0 +1,25 @@
+version: "2.2"
+
+services:
+  kware_reports:
+    image: cubejs/cube:latest
+    container_name: kware_reports
+    restart: always
+    ports:
+      - 8000:4000
+      - 15432:15432
+    environment:
+      - CUBEJS_DEV_MODE=true
+      - CUBEJS_WEB_SOCKETS=true
+      - CUBEJS_DB_TYPE=postgres
+      - CUBEJS_DB_HOST=65.109.65.39
+      - CUBEJS_DB_NAME=imamu_folio_db_reports
+      - CUBEJS_DB_USER=kware_folio
+      - CUBEJS_DB_PASS=Kware_Folio@2025#
+      - CUBEJS_API_SECRET=b5876a8b864ca6792f28620487e0d2bd
+      - CUBEJS_EXTERNAL_DEFAULT=true
+      - CUBEJS_SCHEDULED_REFRESH_DEFAULT=true
+      - CUBEJS_SCHEMA_PATH=model
+
+    volumes:
+      - .:/cube/conf
