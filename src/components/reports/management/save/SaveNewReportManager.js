@@ -20,7 +20,6 @@ function SaveNewReportManager({
   query,
   reportType,
 }) {
-  const { reportTypeRecord, reportDisplayMethods } = useReportTypes(reportType);
   const [queryString] = useQueryString(query);
   const [queryMeta] = useDryQuery(query);
   const intl = useIntl();
