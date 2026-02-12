@@ -32,7 +32,8 @@ function SaveNewReportForm({
   // reportType,
   reportTypeRecord,
   reportDisplayMethods,
-  queryParams,
+  selectedReportType,
+  setSelectedReportType,
   categories
 }) {
   const renderPaneFooter = () => {
@@ -116,7 +117,11 @@ function SaveNewReportForm({
           }
         >
           <form id="form-save-new-report" onSubmit={handleSubmit}>
-            <AdministrativeData reportTypeRecord={reportTypeRecord} />
+            <AdministrativeData 
+              reportTypeRecord={reportTypeRecord}
+              selectedReportType={selectedReportType}
+              setSelectedReportType={setSelectedReportType}
+            />
             <QueryParams queryParams={queryParams} />
             <AuthorizedUsers />
             <AddToCategory categories={categories} />
@@ -143,6 +148,8 @@ SaveNewReportForm.propTypes = {
   handleClose: PropTypes.func.isRequired,
   reportTypeRecord: PropTypes.object,
   reportDisplayMethods: PropTypes.arrayOf(PropTypes.object),
+  selectedReportType: PropTypes.string,
+  setSelectedReportType: PropTypes.func,
   queryParams: PropTypes.arrayOf(PropTypes.object),
   categories: PropTypes.arrayOf(PropTypes.object)
 };

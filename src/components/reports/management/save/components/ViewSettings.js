@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Accordion,
@@ -23,6 +23,13 @@ function ViewSettings(props) {
     }),
     value: method.value
   }));
+
+  // Update form when display methods change
+  useEffect(() => {
+    if (props.reportDisplayMethods && props.reportDisplayMethods.length > 0) {
+      // This will trigger form update through Field components
+    }
+  }, [props.reportDisplayMethods]);
 
   return (
     <>

@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-escape */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { stripesConnect } from '@folio/stripes-core';
 import { useIntl } from 'react-intl';
@@ -18,20 +18,28 @@ function SaveNewReportManager({
   resources,
   mutator,
   query,
-  reportType,
 }) {
   const [queryString] = useQueryString(query);
   const [queryMeta] = useDryQuery(query);
   const intl = useIntl();
 
-  // Get report type configuration using new system
-  const currentReportType = getReportType(reportType);
-  
-  // Get display methods for this report type
-  const displayMethodValues = getDisplayMethodsForType(reportType);
-  const availableDisplayMethods = displayMethodValues.map(methodValue => 
-    displayMethodsConfig.find(dm => dm.value === methodValue)
-  ).filter(Boolean);
+  // State for selected report type
+  const [selectedReportType, setSelectedReportType] = useState('statistical');
+  const [availableDisplayMethods, setAvailableDisplayMethods] = useState([]);
+  const [currentReportType, setCurrentReportType] = useState({});
+
+  // Update display methods when report type changes
+  useEffect(() => {
+    const reportType = getReportType(selectedReportType);
+    setCurrentReportType(reportType);
+    
+    const displayMethodValues = getDisplayMethodsForType(selectedReportType);
+    const methods = displayMethodValues.map(methodValue => 
+      displayMethodsConfig.find(dm => dm.value === methodValue)
+    ).filter(Boolean);
+    
+    setAvailableDisplayMethods(methods);
+  }, [selectedReportType]);
 
   // Generate queryParams from current query filters
   const queryParams = queryMeta?.filters?.map((filter) => ({
@@ -87,9 +95,9 @@ function SaveNewReportManager({
           reportDesc: '',
           reportStatus: 'active',
           privacyType: 'public',
-          reportType,
-          displayMethods: availableDisplayMethods.map((method) => method.value),
-          defaultDisplayMethod: currentReportType.defaultDisplayMethod,
+          reportType: 'statistical',
+          displayMethods: [],
+          defaultDisplayMethod: '',
           authorizedUsers: [],
           queryMetadata: '',
           queryString: '',
@@ -118,6 +126,8 @@ function SaveNewReportManager({
         handleClose={handleClose}
         reportTypeRecord={currentReportType}
         reportDisplayMethods={availableDisplayMethods}
+        selectedReportType={selectedReportType}
+        setSelectedReportType={setSelectedReportType}
         queryParams={queryParams}
         categories={resources.categories?.records || []}
       />
@@ -132,7 +142,6 @@ SaveNewReportManager.propTypes = {
   setShowSavePane: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   query: PropTypes.object.isRequired,
-  reportType: PropTypes.string,
   resources: PropTypes.shape({
     reports: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),

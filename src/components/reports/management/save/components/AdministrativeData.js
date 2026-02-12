@@ -4,7 +4,6 @@ import {
   Accordion,
   Col,
   FilterAccordionHeader,
-  KeyValue,
   Row,
   Select,
   TextArea,
@@ -17,10 +16,19 @@ import {
   reportStatusOptions
 } from '../../../../../constants/dataOptions';
 import { required } from '../../../../../helpers/Validations';
+import reportTypesConfig from '../../../../../constants/ReportsTypes';
 
-function AdministrativeData(props) {
+function AdministrativeData({ reportTypeRecord, selectedReportType, setSelectedReportType }) {
   const [filterToggle, setFilterToggle] = useState(true);
   const intl = useIntl();
+
+  const reportTypeOptions = reportTypesConfig.map(type => ({
+    value: type.value,
+    label: intl.formatMessage({
+      id: `ui-reports.reportTypes.${type.value}.name`,
+      defaultMessage: type.name
+    })
+  }));
 
   return (
     <>
@@ -80,6 +88,29 @@ function AdministrativeData(props) {
           </Col>
         </Row>
         <Row>
+          <Col xs={12}>
+            <Field
+              id="save-new-form-report-type-select"
+              name="reportType"
+              component={Select}
+              label={
+                <FormattedMessage
+                  id="ui-reports.saveNewReportForm.reportTypeField.label"
+                  defaultMessage="Report type"
+                />
+              }
+              placeholder={intl.formatMessage({
+                id: 'ui-reports.saveNewReportForm.reportTypeField.placeholder',
+                defaultMessage: 'Select report type'
+              })}
+              dataOptions={reportTypeOptions}
+              onChange={(e) => setSelectedReportType(e.target.value)}
+              required
+              validate={required}
+            />
+          </Col>
+        </Row>
+        <Row>
           <Col xs={6}>
             <Field
               id="save-new-form-report-desc-selectField"
@@ -119,31 +150,15 @@ function AdministrativeData(props) {
             />
           </Col>
         </Row>
-        <Row>
-          <Col xs={6}>
-            <KeyValue
-              label={
-                <FormattedMessage
-                  id="ui-reports.saveNewReportForm.reportTypeField.label"
-                  defaultMessage="Report type"
-                />
-              }
-              value={
-                <FormattedMessage
-                  id={`ui-reports.reportTypes.label.${props.reportTypeRecord.value}`}
-                  defaultMessage={props.reportTypeRecord.name}
-                />
-              }
-            />
-          </Col>
-        </Row>
       </Accordion>
     </>
   );
 }
 
 AdministrativeData.propTypes = {
-  reportTypeRecord: PropTypes.object
+  reportTypeRecord: PropTypes.object,
+  selectedReportType: PropTypes.string,
+  setSelectedReportType: PropTypes.func
 };
 
 export default AdministrativeData;
