@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { get, isEqual, sortBy } from 'lodash';
 
 import { AppIcon, stripesConnect } from '@folio/stripes-core';
-import { Button, Icon, Pane, Row, Callout } from '@folio/stripes/components';
+import { Button, Icon, Pane, Row, Col, Callout } from '@folio/stripes/components';
 import DashboardsActionsMenu from './DashboardsActionsMenu';
 import DashboardsMenu from './DashboardsMenu';
 import DashboardsContext from '../../../Context/dashboards/DashboardsContext';
