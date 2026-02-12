@@ -15,12 +15,17 @@ function WidgetFormManager(props) {
   const [widgetType, setWidgetType] = useState('singleReport');
   const [isLoading, setIsLoading] = useState(false);
 
-  const currentDashboard = dashboards.find(
-    dash => dash.name === props.location.pathname.split('/')[3]
-  );
+  // Get dashboard from URL
+  const dashboardNameFromUrl = props.location.pathname.split('/')[3];
+  const currentDashboard = useMemo(() => {
+    return dashboards.find(dash => dash.name === dashboardNameFromUrl);
+  }, [dashboards, dashboardNameFromUrl]);
 
   const isEditMode = props.location?.pathname?.includes('/edit/');
   const widgetId = isEditMode ? props.location.pathname.split('/').pop() : null;
+
+  console.log('WidgetFormManager - Current dashboard:', currentDashboard);
+  console.log('WidgetFormManager - Dashboard name from URL:', dashboardNameFromUrl);
 
   // Load widget data in edit mode
   useEffect(() => {

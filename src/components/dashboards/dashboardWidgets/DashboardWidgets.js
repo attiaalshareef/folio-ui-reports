@@ -19,21 +19,34 @@ function DashboardWidgets(props) {
   const [widgetsList, setWidgetsList] = useState([]);
   const calloutRef = React.useRef();
 
+  // Get dashboard from URL or default
+  const dashboardNameFromUrl = props.location?.pathname?.split('/')[3];
+
   useEffect(() => {
-    if (defaultDashboard?.defaultDashboard?.configValue) {
-      setCurrentDashboard(defaultDashboard?.defaultDashboard?.configValue);
+    if (dashboardNameFromUrl && dashboards.length > 0) {
+      // Find dashboard by name from URL
+      const dashboard = dashboards.find(d => d.name === dashboardNameFromUrl);
+      if (dashboard) {
+        setCurrentDashboard(dashboard);
+      }
+    } else if (defaultDashboard?.defaultDashboard?.configValue) {
+      // Fallback to default dashboard
+      setCurrentDashboard(defaultDashboard.defaultDashboard.configValue);
     }
-  }, [defaultDashboard]);
+  }, [dashboardNameFromUrl, dashboards, defaultDashboard]);
 
   useEffect(() => {
     const allWidgets = (props.resources.widgets || {}).records || [];
-    const nextWidgets = sortBy(
-      allWidgets, 
-      ['order', 'name']
-    )?.filter((widget) => widget.dashboardId === currentDashboard.id);
+    
+    // Only filter if we have a valid dashboard ID
+    const nextWidgets = currentDashboard?.id 
+      ? sortBy(allWidgets, ['order', 'name']).filter(
+          (widget) => widget.dashboardId === currentDashboard.id
+        )
+      : [];
 
     console.log('All widgets:', allWidgets);
-    console.log('Current dashboard ID:', currentDashboard.id);
+    console.log('Current dashboard:', currentDashboard);
     console.log('Filtered widgets:', nextWidgets);
 
     if (!isEqual(nextWidgets, widgetsList)) {
