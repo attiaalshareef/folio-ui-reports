@@ -15,16 +15,25 @@ function WidgetFormManager(props) {
   const [widgetType, setWidgetType] = useState('singleReport');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Get dashboard from URL
-  const dashboardNameFromUrl = props.location.pathname.split('/')[3];
+  // Get dashboard from URL - now URL contains both name and ID
+  const pathParts = props.location.pathname.split('/');
+  const dashboardNameFromUrl = pathParts[3];
+  const dashboardIdFromUrl = pathParts[4]?.split('/')[0]; // Get ID before /widgets
+  
   const currentDashboard = useMemo(() => {
+    // Try to find by ID first (more reliable)
+    if (dashboardIdFromUrl) {
+      return dashboards.find(dash => dash.id === dashboardIdFromUrl);
+    }
+    // Fallback to name
     return dashboards.find(dash => dash.name === dashboardNameFromUrl);
-  }, [dashboards, dashboardNameFromUrl]);
+  }, [dashboards, dashboardNameFromUrl, dashboardIdFromUrl]);
 
   const isEditMode = props.location?.pathname?.includes('/edit/');
   const widgetId = isEditMode ? props.location.pathname.split('/').pop() : null;
 
   console.log('WidgetFormManager - Current dashboard:', currentDashboard);
+  console.log('WidgetFormManager - Dashboard ID from URL:', dashboardIdFromUrl);
   console.log('WidgetFormManager - Dashboard name from URL:', dashboardNameFromUrl);
 
   // Load widget data in edit mode

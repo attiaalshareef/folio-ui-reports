@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import PropTypes, { object } from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { withRouter } from 'react-router';
 import {
   NavList,
   NavListItem,
@@ -21,6 +22,7 @@ const DashboardsMenu = ({
   dataOptions,
   currentDashboard,
   setCurrentDashboard,
+  history,
 }) => {
   const [DropdownOpen, setDropdownOpen] = useState(false);
 
@@ -42,6 +44,7 @@ const DashboardsMenu = ({
               selected={currentDashboard?.id === dashboard?.id}
               onClick={() => {
                 setCurrentDashboard(dashboard);
+                history.push(`/reports/dashboards/${dashboard.name}/${dashboard.id}`);
                 toggleDropdown();
               }}
             >
@@ -106,4 +109,4 @@ const DashboardsMenu = ({
 
 DashboardsMenu.propTypes = propTypes;
 
-export default DashboardsMenu;
+export default withRouter(DashboardsMenu);

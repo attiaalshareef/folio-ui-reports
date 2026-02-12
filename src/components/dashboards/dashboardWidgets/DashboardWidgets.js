@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { get, isEqual, sortBy } from 'lodash';
 
 import { AppIcon, stripesConnect } from '@folio/stripes-core';
-import { Button, Icon, Pane, Row, Col, Callout } from '@folio/stripes/components';
+import { Button, Icon, Pane, Row, Col, Callout, Layout, Loading } from '@folio/stripes/components';
 import DashboardsActionsMenu from './DashboardsActionsMenu';
 import DashboardsMenu from './DashboardsMenu';
 import DashboardsContext from '../../../Context/dashboards/DashboardsContext';
@@ -15,25 +15,36 @@ import Widget from '../widgetForm/components/Widget';
 function DashboardWidgets(props) {
   const dashboards = useContext(DashboardsContext);
   const defaultDashboard = useContext(AppConfigListContext);
-  const [currentDashboard, setCurrentDashboard] = useState({});
+  const [currentDashboard, setCurrentDashboard] = useState(null);
   const [widgetsList, setWidgetsList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const calloutRef = React.useRef();
 
   // Get dashboard from URL or default
   const dashboardNameFromUrl = props.location?.pathname?.split('/')[3];
 
   useEffect(() => {
+    setIsLoading(true);
+    
     if (dashboardNameFromUrl && dashboards.length > 0) {
       // Find dashboard by name from URL
       const dashboard = dashboards.find(d => d.name === dashboardNameFromUrl);
       if (dashboard) {
         setCurrentDashboard(dashboard);
+        // Update URL with dashboard ID if not present
+        if (!props.location.pathname.includes(dashboard.id)) {
+          props.history.replace(`/reports/dashboards/${dashboard.name}/${dashboard.id}`);
+        }
+        setIsLoading(false);
       }
-    } else if (defaultDashboard?.defaultDashboard?.configValue) {
-      // Fallback to default dashboard
-      setCurrentDashboard(defaultDashboard.defaultDashboard.configValue);
+    } else if (defaultDashboard?.defaultDashboard?.configValue && dashboards.length > 0) {
+      // Fallback to default dashboard and redirect
+      const dashboard = defaultDashboard.defaultDashboard.configValue;
+      setCurrentDashboard(dashboard);
+      props.history.replace(`/reports/dashboards/${dashboard.name}/${dashboard.id}`);
+      setIsLoading(false);
     }
-  }, [dashboardNameFromUrl, dashboards, defaultDashboard]);
+  }, [dashboardNameFromUrl, dashboards, defaultDashboard, props.history, props.location.pathname]);
 
   useEffect(() => {
     const allWidgets = (props.resources.widgets || {}).records || [];
@@ -85,7 +96,11 @@ function DashboardWidgets(props) {
         }
         lastMenu={<DashboardsActionsMenu currentDashboard={currentDashboard} />}
       >
-        {!widgetsList.length ? (
+        {isLoading || !currentDashboard ? (
+          <Layout className="centered full" style={{ minHeight: '400px' }}>
+            <Loading size="xlarge" />
+          </Layout>
+        ) : !widgetsList.length ? (
           <div className={css.emptyList}>
             <div style={{ paddingBottom: '10px' }}>
               <FormattedMessage
