@@ -10,7 +10,7 @@ import {
   TextField
 } from '@folio/stripes/components';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Field } from 'react-final-form';
+import { Field, useForm } from 'react-final-form';
 import {
   reportPrivacyOptions,
   reportStatusOptions
@@ -21,6 +21,7 @@ import reportTypesConfig from '../../../../../constants/ReportsTypes';
 function AdministrativeData({ reportTypeRecord, selectedReportType, setSelectedReportType }) {
   const [filterToggle, setFilterToggle] = useState(true);
   const intl = useIntl();
+  const form = useForm();
 
   const reportTypeOptions = reportTypesConfig.map(type => ({
     value: type.value,
@@ -104,7 +105,11 @@ function AdministrativeData({ reportTypeRecord, selectedReportType, setSelectedR
                 defaultMessage: 'Select report type'
               })}
               dataOptions={reportTypeOptions}
-              onChange={(e) => setSelectedReportType(e.target.value)}
+              onChange={(e) => {
+                const newType = e.target.value;
+                setSelectedReportType(newType);
+                form.change('reportType', newType);
+              }}
               required
               validate={required}
             />
