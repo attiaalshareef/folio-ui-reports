@@ -26,10 +26,15 @@ function DashboardWidgets(props) {
   }, [defaultDashboard]);
 
   useEffect(() => {
+    const allWidgets = (props.resources.widgets || {}).records || [];
     const nextWidgets = sortBy(
-      (props.resources.widgets || {}).records || [], 
+      allWidgets, 
       ['order', 'name']
     )?.filter((widget) => widget.dashboardId === currentDashboard.id);
+
+    console.log('All widgets:', allWidgets);
+    console.log('Current dashboard ID:', currentDashboard.id);
+    console.log('Filtered widgets:', nextWidgets);
 
     if (!isEqual(nextWidgets, widgetsList)) {
       setWidgetsList(nextWidgets);
