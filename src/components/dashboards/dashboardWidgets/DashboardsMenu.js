@@ -23,8 +23,13 @@ const DashboardsMenu = ({
   currentDashboard,
   setCurrentDashboard,
   history,
+  location,
 }) => {
   const [DropdownOpen, setDropdownOpen] = useState(false);
+
+  // Get dashboard ID from URL
+  const pathParts = location?.pathname?.split('/');
+  const dashboardIdFromUrl = pathParts[3];
 
   const toggleDropdown = () => {
     setDropdownOpen(!DropdownOpen);
@@ -34,26 +39,26 @@ const DashboardsMenu = ({
     return (
       <div>
         <NavList>
-          {dataOptions?.map((dashboard) => (
-            <NavListItem
-              key={dashboard.id}
-              id={`dashboards-menu-${dashboard?.id}`}
-              buttonStyle={`${
-                currentDashboard?.id === dashboard?.id ? 'primary' : 'default'
-              }`}
-              selected={currentDashboard?.id === dashboard?.id}
-              onClick={() => {
-                setCurrentDashboard(dashboard);
-                history.push(`/reports/dashboards/${dashboard.id}`);
-                toggleDropdown();
-              }}
-            >
-              <FormattedMessage
-                id={`ui-reports.dashboards.name.${dashboard?.name}`}
-                defaultMessage={dashboard?.name}
-              />
-            </NavListItem>
-          ))}
+          {dataOptions?.map((dashboard) => {
+            const isSelected = dashboardIdFromUrl === dashboard?.id;
+            return (
+              <NavListItem
+                key={dashboard.id}
+                id={`dashboards-menu-${dashboard?.id}`}
+                isActive={isSelected}
+                onClick={() => {
+                  setCurrentDashboard(dashboard);
+                  history.push(`/reports/dashboards/${dashboard.id}`);
+                  toggleDropdown();
+                }}
+              >
+                <FormattedMessage
+                  id={`ui-reports.dashboards.name.${dashboard?.name}`}
+                  defaultMessage={dashboard?.name}
+                />
+              </NavListItem>
+            );
+          })}
         </NavList>
       </div>
     );

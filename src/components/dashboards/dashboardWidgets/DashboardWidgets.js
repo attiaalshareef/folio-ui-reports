@@ -30,18 +30,20 @@ function DashboardWidgets(props) {
     if (dashboardIdFromUrl && dashboards.length > 0) {
       // Find dashboard by ID from URL
       const dashboard = dashboards.find(d => d.id === dashboardIdFromUrl);
-      if (dashboard) {
+      if (dashboard && dashboard.id !== currentDashboard?.id) {
         setCurrentDashboard(dashboard);
-        setIsLoading(false);
       }
+      setIsLoading(false);
     } else if (defaultDashboard?.defaultDashboard?.configValue && dashboards.length > 0) {
       // Fallback to default dashboard and redirect
       const dashboard = defaultDashboard.defaultDashboard.configValue;
-      setCurrentDashboard(dashboard);
+      if (dashboard.id !== currentDashboard?.id) {
+        setCurrentDashboard(dashboard);
+      }
       props.history.replace(`/reports/dashboards/${dashboard.id}`);
       setIsLoading(false);
     }
-  }, [dashboardIdFromUrl, dashboards, defaultDashboard, props.history]);
+  }, [dashboardIdFromUrl, dashboards, defaultDashboard, props.history, currentDashboard]);
 
   useEffect(() => {
     const allWidgets = (props.resources.widgets || {}).records || [];
