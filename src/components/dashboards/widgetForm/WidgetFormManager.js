@@ -86,7 +86,6 @@ function WidgetFormManager(props) {
         });
       }
       
-      props.mutator.widgets.GET();
       props.handleClose();
     } catch (error) {
       console.error('Error saving widget:', error);

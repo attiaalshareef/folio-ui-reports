@@ -42,8 +42,6 @@ function DashboardWidgets(props) {
         type: 'success',
         message: 'Widget deleted successfully'
       });
-      // Refresh list
-      props.mutator.widgets.GET();
     } catch (error) {
       console.error('Error deleting widget:', error);
       calloutRef.current?.sendCallout({
