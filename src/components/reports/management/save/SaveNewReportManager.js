@@ -25,7 +25,8 @@ function SaveNewReportManager({
   const [queryMeta] = useDryQuery(query);
   const intl = useIntl();
 
-  console.log('queryMeta', queryMeta);
+  console.log('reportDisplayMethods:', reportDisplayMethods);
+  console.log('reportTypeRecord:', reportTypeRecord);
 
   // Generate queryParams from current query filters
   const queryParams = queryMeta?.filters?.map((filter) => ({
@@ -82,7 +83,7 @@ function SaveNewReportManager({
           reportStatus: 'active',
           privacyType: 'public',
           reportType,
-          displayMethods: reportDisplayMethods.map((method) => method.value),
+          displayMethods: (reportDisplayMethods || []).map((method) => method?.value).filter(Boolean),
           defaultDisplayMethod: reportTypeRecord?.defaultDisplayMethod,
           authorizedUsers: [],
           queryMetadata: '',
@@ -111,7 +112,7 @@ function SaveNewReportManager({
         setShowSavePane={setShowSavePane}
         handleClose={handleClose}
         reportTypeRecord={reportTypeRecord}
-        reportDisplayMethods={reportDisplayMethods}
+        reportDisplayMethods={reportDisplayMethods || []}
         queryParams={queryParams}
         categories={resources.categories?.records || []}
       />

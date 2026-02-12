@@ -16,6 +16,14 @@ function ViewSettings(props) {
   const [accordionToggle, setAccordionToggle] = useState(true);
   const intl = useIntl();
 
+  const displayMethodsOptions = (props.reportDisplayMethods || []).map(method => ({
+    label: intl.formatMessage({
+      id: method.translationKey.id,
+      defaultMessage: method.translationKey.defaultMessage
+    }),
+    value: method.value
+  }));
+
   return (
     <>
       <Accordion
@@ -47,13 +55,7 @@ function ViewSettings(props) {
                 id: 'ui-reports.newReport.fields.displayMethods.placeholder',
                 defaultMessage: 'Choose display methods'
               })}
-              dataOptions={props.reportDisplayMethods.map(method => ({
-                label: intl.formatMessage({
-                  id: method.translationKey.id,
-                  defaultMessage: method.translationKey.defaultMessage
-                }),
-                value: method.value
-              }))}
+              dataOptions={displayMethodsOptions}
               required
               validate={required}
             />
@@ -75,13 +77,7 @@ function ViewSettings(props) {
                 id: 'ui-reports.newReport.fields.defaultDisplayMethod.placeholder',
                 defaultMessage: 'Choose default display method'
               })}
-              dataOptions={props.reportDisplayMethods.map(method => ({
-                label: intl.formatMessage({
-                  id: method.translationKey.id,
-                  defaultMessage: method.translationKey.defaultMessage
-                }),
-                value: method.value
-              }))}
+              dataOptions={displayMethodsOptions}
               required
               validate={required}
             />
