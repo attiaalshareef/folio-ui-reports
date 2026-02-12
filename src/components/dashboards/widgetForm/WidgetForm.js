@@ -37,6 +37,7 @@ function WidgetForm({
   setSelectedReports,
   widgetType,
   setWidgetType,
+  isLoading,
 }) {
   const intl = useIntl();
 
@@ -47,12 +48,14 @@ function WidgetForm({
         renderEnd={
           <Button
             buttonStyle="primary"
-            disabled={pristine || submitting}
+            disabled={pristine || submitting || isLoading}
             id="widget-form-pane-save-btn"
             marginBottom0
             type="submit"
-            onClick={() => {
-              handleSubmit();
+            onClick={async (e) => {
+              e.preventDefault();
+              await handleSubmit();
+              form.reset();
               handleClose();
             }}
           >
@@ -164,7 +167,22 @@ function WidgetForm({
               />
             </Col>
             <Col xs={6}>
-              {/* حقل نوع الويدجت منقول إلى WidgetReportData */}
+              <Field
+                id="form-widget-order-textField"
+                name="order"
+                component={TextField}
+                type="number"
+                label={
+                  <FormattedMessage
+                    id="ui-reports.dashboards.widgetForm.orderField.label"
+                    defaultMessage="Display order"
+                  />
+                }
+                placeholder={intl.formatMessage({
+                  id: 'ui-reports.dashboards.widgetForm.orderField.placeholder',
+                  defaultMessage: 'Enter display order',
+                })}
+              />
             </Col>
           </Row>
           <Row>

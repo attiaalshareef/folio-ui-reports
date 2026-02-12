@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { get, isEqual, sortBy } from 'lodash';
 
 import { AppIcon, stripesConnect } from '@folio/stripes-core';
-import { Button, Icon, Pane, Row } from '@folio/stripes/components';
+import { Button, Icon, Pane, Row, Callout } from '@folio/stripes/components';
 import DashboardsActionsMenu from './DashboardsActionsMenu';
 import DashboardsMenu from './DashboardsMenu';
 import DashboardsContext from '../../../Context/dashboards/DashboardsContext';
@@ -17,6 +17,7 @@ function DashboardWidgets(props) {
   const defaultDashboard = useContext(AppConfigListContext);
   const [currentDashboard, setCurrentDashboard] = useState({});
   const [widgetsList, setWidgetsList] = useState([]);
+  const calloutRef = React.useRef();
 
   useEffect(() => {
     if (defaultDashboard?.defaultDashboard?.configValue) {
@@ -34,64 +35,80 @@ function DashboardWidgets(props) {
     }
   }, [currentDashboard, props.resources.widgets, widgetsList]);
 
-  const onDeleteWidget = (widgetId) => {
-    props.mutator.widgets.DELETE({
-      id: widgetId,
-    });
+  const onDeleteWidget = async (widgetId) => {
+    try {
+      await props.mutator.widgets.DELETE({ id: widgetId });
+      calloutRef.current?.sendCallout({
+        type: 'success',
+        message: 'Widget deleted successfully'
+      });
+      // Refresh list
+      props.mutator.widgets.GET();
+    } catch (error) {
+      console.error('Error deleting widget:', error);
+      calloutRef.current?.sendCallout({
+        type: 'error',
+        message: `Error deleting widget: ${error.message}`
+      });
+    }
   };
 
   return (
-    <Pane
-      id="pane-dashboard-widgets"
-      appIcon={<AppIcon app="reports" />}
-      padContent={false}
-      paneTitle={
-        <DashboardsMenu
-          dataOptions={dashboards}
-          currentDashboard={currentDashboard}
-          setCurrentDashboard={setCurrentDashboard}
-        />
-      }
-      lastMenu={<DashboardsActionsMenu currentDashboard={currentDashboard} />}
-    >
-      {!widgetsList.length ? (
-        <div className={css.emptyList}>
-          <div style={{ paddingBottom: '10px' }}>
-            <FormattedMessage
-              id="ui-reports.dashboards.widgets.noWidgets.message"
-              defaultMessage="No widgets found!"
-            />
-          </div>
-          <Button
-            marginBottom0
-            id="dashboards-widgets-list-new-widget-btn"
-            to={{
-              pathname: `/reports/dashboards/${currentDashboard.name}/widgets/create`,
-            }}
-          >
-            <Icon icon="plus-sign">
+    <>
+      <Pane
+        id="pane-dashboard-widgets"
+        appIcon={<AppIcon app="reports" />}
+        padContent={false}
+        paneTitle={
+          <DashboardsMenu
+            dataOptions={dashboards}
+            currentDashboard={currentDashboard}
+            setCurrentDashboard={setCurrentDashboard}
+          />
+        }
+        lastMenu={<DashboardsActionsMenu currentDashboard={currentDashboard} />}
+      >
+        {!widgetsList.length ? (
+          <div className={css.emptyList}>
+            <div style={{ paddingBottom: '10px' }}>
               <FormattedMessage
-                id="ui-reports.dashboards.widgets.addNewWidget.btn"
-                defaultMessage="Create new widget"
+                id="ui-reports.dashboards.widgets.noWidgets.message"
+                defaultMessage="No widgets found!"
               />
-            </Icon>
-          </Button>
-        </div>
-      ) : (
-        <div style={{ padding: '20px' }}>
-          <Row>
-            {widgetsList?.map((widget, index) => (
-              <Widget
-                key={widget.id}
-                widget={widget}
-                index={index}
-                onDeleteWidget={onDeleteWidget}
-              />
-            ))}
-          </Row>
-        </div>
-      )}
-    </Pane>
+            </div>
+            <Button
+              marginBottom0
+              id="dashboards-widgets-list-new-widget-btn"
+              to={{
+                pathname: `/reports/dashboards/${currentDashboard.name}/widgets/create`,
+              }}
+            >
+              <Icon icon="plus-sign">
+                <FormattedMessage
+                  id="ui-reports.dashboards.widgets.addNewWidget.btn"
+                  defaultMessage="Create new widget"
+                />
+              </Icon>
+            </Button>
+          </div>
+        ) : (
+          <div style={{ padding: '20px' }}>
+            <Row>
+              {widgetsList?.map((widget, index) => (
+                <Widget
+                  key={widget.id}
+                  widget={widget}
+                  index={index}
+                  onDeleteWidget={onDeleteWidget}
+                  currentDashboard={currentDashboard}
+                />
+              ))}
+            </Row>
+          </div>
+        )}
+      </Pane>
+      <Callout ref={calloutRef} />
+    </>
   );
 }
 

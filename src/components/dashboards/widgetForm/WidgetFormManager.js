@@ -1,84 +1,101 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { stripesConnect } from '@folio/stripes-core';
+import { Callout } from '@folio/stripes/components';
 import WidgetForm from './WidgetForm';
 import DashboardsContext from '../../../Context/dashboards/DashboardsContext';
 
 function WidgetFormManager(props) {
   const dashboards = useContext(DashboardsContext);
+  const calloutRef = React.useRef();
 
   const [initialValues, setInitialValues] = useState({});
   const [currentReport, setCurrentReport] = useState({});
   const [selectedReports, setSelectedReports] = useState([]);
   const [widgetType, setWidgetType] = useState('singleReport');
+  const [isLoading, setIsLoading] = useState(false);
 
   const currentDashboard = dashboards.find(
     dash => dash.name === props.location.pathname.split('/')[3]
   );
 
+  const isEditMode = props.location?.pathname?.includes('/edit/');
+  const widgetId = isEditMode ? props.location.pathname.split('/').pop() : null;
+
+  // Load widget data in edit mode
   useEffect(() => {
-    if (props.location?.pathname?.endsWith('/edit')) {
+    if (isEditMode && widgetId && props.resources.widget?.records?.[0]) {
+      const widget = props.resources.widget.records[0];
       setInitialValues({
-        reportId: '',
-        wedgetName: 'Total Instances',
-        wedgetDesc: 'Total Instances',
-        visableColumns: [],
-        viewSettings: {}
+        widgetName: widget.name || '',
+        widgetDesc: widget.desc || '',
+        order: widget.order || 0,
       });
+      setWidgetType(widget.generalSettings?.widgetType || 'singleReport');
     }
-  }, [props.location]);
+  }, [isEditMode, widgetId, props.resources.widget]);
 
-  console.log({ currentReport });
-
-  const getFieldValues = values => {
-    const columns = [];
-    values.map(val => columns.push(val.value));
-
-    return columns;
-  };
-
-  const onFormSubmit = values => {
-    console.log({ values, widgetType, selectedReports, currentReport });
+  const onFormSubmit = async (values) => {
+    setIsLoading(true);
     
-    // تحضير بيانات التقارير حسب نوع الويدجت
-    let reportsIds = [];
-    let queriesMetadata = [];
-    
-    if (widgetType === 'singleReport' && currentReport?.id) {
-      reportsIds = [currentReport.id];
-      queriesMetadata = [currentReport.queryMetadata];
-    } else if (selectedReports.length > 0) {
-      reportsIds = selectedReports.map(report => report.id);
-      queriesMetadata = selectedReports.map(report => report.queryMetadata);
-    }
-    
-    if (Object.keys(initialValues).length) {
-      // تحديث ويدجت موجود
-      const widgetId = props.location?.pathname?.split('/')[4];
-      props.mutator.widgetId.replace(widgetId);
-      // TODO: تنفيذ منطق التحديث
-    } else {
-      // إنشاء ويدجت جديد
-      props.mutator.widgets.POST({
+    try {
+      let reportsIds = [];
+      let queriesMetadata = [];
+      
+      if (widgetType === 'singleReport' && currentReport?.id) {
+        reportsIds = [currentReport.id];
+        queriesMetadata = [currentReport.queryMetadata];
+      } else if (selectedReports.length > 0) {
+        reportsIds = selectedReports.map(report => report.id);
+        queriesMetadata = selectedReports.map(report => report.queryMetadata);
+      }
+
+      const widgetData = {
         name: values.widgetName,
         desc: values.widgetDesc,
+        order: values.order || 0,
+        dashboardId: currentDashboard?.id,
         type: [{
           name: widgetType,
-          supportedReportsTypes: ['numMetric', 'dimMetric', 'periodMetric', 'list'],
-          displayMethod: [{
+          supportedReportsTypes: ['statistical', 'detailed', 'summary', 'trend', 'comparative', 'distribution', 'performance'],
+          displayMethod: currentReport?.displayMethods || [{
             name: 'numLabel',
             displaySettings: {}
           }],
-          defaultMethod: 'numLabel'
+          defaultMethod: currentReport?.defaultDisplayMethod || 'numLabel'
         }],
         reportsIds: reportsIds,
-        dashboardId: currentDashboard?.id,
         queriesMetadata: queriesMetadata,
         generalSettings: {
           widgetType: widgetType,
           reportsCount: reportsIds.length
         }
+      };
+      
+      if (isEditMode && widgetId) {
+        await props.mutator.widget.PUT({ ...widgetData, id: widgetId });
+        calloutRef.current?.sendCallout({
+          type: 'success',
+          message: 'Widget updated successfully'
+        });
+      } else {
+        await props.mutator.widgets.POST(widgetData);
+        calloutRef.current?.sendCallout({
+          type: 'success',
+          message: 'Widget created successfully'
+        });
+      }
+      
+      props.mutator.widgets.GET();
+      props.handleClose();
+    } catch (error) {
+      console.error('Error saving widget:', error);
+      calloutRef.current?.sendCallout({
+        type: 'error',
+        message: `Error saving widget: ${error.message}`
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -88,7 +105,7 @@ function WidgetFormManager(props) {
         handleClose={props.handleClose}
         onSubmit={onFormSubmit}
         initialValues={initialValues}
-        editMode={Object.keys(initialValues).length}
+        editMode={isEditMode}
         currentDashName={props.location.pathname.split('/')[3]}
         currentReport={currentReport}
         setCurrentReport={setCurrentReport}
@@ -96,7 +113,9 @@ function WidgetFormManager(props) {
         setSelectedReports={setSelectedReports}
         widgetType={widgetType}
         setWidgetType={setWidgetType}
+        isLoading={isLoading}
       />
+      <Callout ref={calloutRef} />
     </>
   );
 }
@@ -137,13 +156,19 @@ WidgetFormManager.manifest = Object.freeze({
     POST: {
       path: 'widgets'
     },
+    accumulate: true,
+    fetch: false,
+  },
+  widget: {
+    type: 'okapi',
+    records: 'widgets',
+    path: 'widgets/:{widgetId}',
     PUT: {
-      path: 'widgets'
+      path: 'widgets/:{widgetId}'
     },
-    DELETE: {
-      path: 'widgets'
-    }
-  }
+    accumulate: true,
+    fetch: false,
+  },
 });
 
 export default stripesConnect(WidgetFormManager);

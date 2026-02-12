@@ -6,6 +6,8 @@ import {
   Button,
   Icon,
   MenuSection,
+  Modal,
+  ModalFooter,
 } from '@folio/stripes-components';
 import { FormattedMessage } from 'react-intl';
 import { IfPermission } from '@folio/stripes-core';
@@ -13,6 +15,8 @@ import { GoKebabHorizontal } from 'react-icons/go';
 
 const WidgetActionsMenu = (props) => {
   const [dropdownOpen, setdropdownOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showMoveModal, setShowMoveModal] = useState(false);
 
   const toggleDropdown = () => {
     setdropdownOpen(!dropdownOpen);
@@ -21,16 +25,13 @@ const WidgetActionsMenu = (props) => {
   const getDropdownContent = () => {
     return (
       <MenuSection>
-        {/* <IfPermission perm="ui-reports.create-report"> */}
         <Button
           marginBottom0
-          id="dashboards-actions-menu-create-new-btn"
+          id="widget-actions-menu-edit-btn"
           buttonStyle="dropdownItem"
-          // to={{
-          //   pathname: `/reports/dashboards/${props.currentDashboard.name}/widgets/create`,
-          // }}
-          // onMouseDown={(e) => e.preventDefault()}
-          disabled
+          to={{
+            pathname: `/reports/dashboards/${props.currentDashboard?.name}/widgets/edit/${props.widget?.id}`,
+          }}
         >
           <Icon icon="edit">
             <FormattedMessage
@@ -39,19 +40,15 @@ const WidgetActionsMenu = (props) => {
             />
           </Icon>
         </Button>
-        {/* </IfPermission> */}
 
-        {/* <IfPermission perm="ui-reports.create-report"> */}
         <Button
           marginBottom0
-          id="dashboards-actions-menu-create-new-btn"
+          id="widget-actions-menu-delete-btn"
           buttonStyle="dropdownItem"
-          onClick={() => props.onDeleteWidget(props.widget?.id)}
-          // to={{
-          //   pathname: `/reports/dashboards/${props.currentDashboard.name}/widgets/create`,
-          // }}
-          // onMouseDown={(e) => e.preventDefault()}
-          disabled
+          onClick={() => {
+            setShowDeleteModal(true);
+            setdropdownOpen(false);
+          }}
         >
           <Icon icon="trash">
             <FormattedMessage
@@ -60,18 +57,15 @@ const WidgetActionsMenu = (props) => {
             />
           </Icon>
         </Button>
-        {/* </IfPermission> */}
 
-        {/* <IfPermission perm="ui-reports.create-report"> */}
         <Button
           marginBottom0
-          id="dashboards-actions-menu-create-new-btn"
+          id="widget-actions-menu-move-btn"
           buttonStyle="dropdownItem"
-          // to={{
-          //   pathname: `/reports/dashboards/${props.currentDashboard.name}/widgets/create`,
-          // }}
-          // onMouseDown={(e) => e.preventDefault()}
-          disabled
+          onClick={() => {
+            setShowMoveModal(true);
+            setdropdownOpen(false);
+          }}
         >
           <Icon icon="transfer">
             <FormattedMessage
@@ -80,7 +74,6 @@ const WidgetActionsMenu = (props) => {
             />
           </Icon>
         </Button>
-        {/* </IfPermission> */}
       </MenuSection>
     );
   };
@@ -126,6 +119,87 @@ const WidgetActionsMenu = (props) => {
         relativePosition
         focusHandlers={{ open: () => null }}
       />
+      
+      {/* Delete Confirmation Modal */}
+      <Modal
+        open={showDeleteModal}
+        label={
+          <FormattedMessage
+            id="ui-reports.dashboards.widgets.deleteModal.title"
+            defaultMessage="Delete widget"
+          />
+        }
+        footer={
+          <ModalFooter>
+            <Button
+              buttonStyle="primary"
+              onClick={() => {
+                props.onDeleteWidget(props.widget?.id);
+                setShowDeleteModal(false);
+              }}
+            >
+              <FormattedMessage
+                id="ui-reports.dashboards.widgets.deleteModal.confirm"
+                defaultMessage="Delete"
+              />
+            </Button>
+            <Button
+              onClick={() => setShowDeleteModal(false)}
+            >
+              <FormattedMessage
+                id="ui-reports.dashboards.widgets.deleteModal.cancel"
+                defaultMessage="Cancel"
+              />
+            </Button>
+          </ModalFooter>
+        }
+      >
+        <FormattedMessage
+          id="ui-reports.dashboards.widgets.deleteModal.message"
+          defaultMessage="Are you sure you want to delete this widget?"
+        />
+      </Modal>
+
+      {/* Move Modal - TODO: Implement move functionality */}
+      <Modal
+        open={showMoveModal}
+        label={
+          <FormattedMessage
+            id="ui-reports.dashboards.widgets.moveModal.title"
+            defaultMessage="Move widget"
+          />
+        }
+        footer={
+          <ModalFooter>
+            <Button
+              buttonStyle="primary"
+              onClick={() => {
+                // TODO: Implement move logic
+                setShowMoveModal(false);
+              }}
+            >
+              <FormattedMessage
+                id="ui-reports.dashboards.widgets.moveModal.confirm"
+                defaultMessage="Move"
+              />
+            </Button>
+            <Button
+              onClick={() => setShowMoveModal(false)}
+            >
+              <FormattedMessage
+                id="ui-reports.dashboards.widgets.moveModal.cancel"
+                defaultMessage="Cancel"
+              />
+            </Button>
+          </ModalFooter>
+        }
+      >
+        <FormattedMessage
+          id="ui-reports.dashboards.widgets.moveModal.message"
+          defaultMessage="Select dashboard to move this widget to:"
+        />
+        {/* TODO: Add dashboard selector */}
+      </Modal>
     </>
   );
 };

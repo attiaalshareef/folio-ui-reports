@@ -605,5 +605,15 @@
   "saveNewReportForm.authorizedUsers.role.editor": "Editor",
   "saveNewReportForm.authorizedUsers.role.viewer": "Viewer",
   "saveNewReportForm.viewSettings.displayMethods": "Display Methods",
-  "saveNewReportForm.viewSettings.defaultDisplayMethod": "Default Display Method"
+  "saveNewReportForm.viewSettings.defaultDisplayMethod": "Default Display Method",
+  "dashboards.widgetForm.orderField.label": "Display order",
+  "dashboards.widgetForm.orderField.placeholder": "Enter display order",
+  "dashboards.widgets.deleteModal.title": "Delete widget",
+  "dashboards.widgets.deleteModal.message": "Are you sure you want to delete this widget?",
+  "dashboards.widgets.deleteModal.confirm": "Delete",
+  "dashboards.widgets.deleteModal.cancel": "Cancel",
+  "dashboards.widgets.moveModal.title": "Move widget",
+  "dashboards.widgets.moveModal.message": "Select dashboard to move this widget to:",
+  "dashboards.widgets.moveModal.confirm": "Move",
+  "dashboards.widgets.moveModal.cancel": "Cancel"
 }

@@ -8,7 +8,7 @@ import ReportsContext from '../../../../Context/reports/ReportsContext';
 import { renderDisplayComponent } from '../../../reports/results/core/DisplayMethodRegistry';
 import MultiReportsWidget from './MultiReportsWidget';
 
-function Widget({ widget, index, onDeleteWidget }) {
+function Widget({ widget, index, onDeleteWidget, currentDashboard }) {
   const reports = useContext(ReportsContext);
   const [reportData, setReportData] = useState({});
   const [widgetType, setWidgetType] = useState('singleReport');
@@ -97,7 +97,11 @@ function Widget({ widget, index, onDeleteWidget }) {
           </Icon>
         }
         headerEnd={
-          <WidgetActionsMenu onDeleteWidget={onDeleteWidget} widget={widget} />
+          <WidgetActionsMenu 
+            onDeleteWidget={onDeleteWidget} 
+            widget={widget}
+            currentDashboard={currentDashboard}
+          />
         }
         marginBottom0
       >
@@ -111,6 +115,7 @@ Widget.propTypes = {
   widget: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   onDeleteWidget: PropTypes.func.isRequired,
+  currentDashboard: PropTypes.object,
 };
 
 export default Widget;

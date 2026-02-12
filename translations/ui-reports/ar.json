@@ -617,5 +617,15 @@
   "authorizedUsers.role.viewer": "مشاهد",
   "newReport.saveReportPane.addToCategory.addButton": "إضافة إلى فئة",
   "newReport.saveReportPane.addToDashboard.addButton": "إضافة إلى لوحة تحكم",
-  "newReport.saveReportPane.addToCategory.placeholder": "اختر فئة"
+  "newReport.saveReportPane.addToCategory.placeholder": "اختر فئة",
+  "dashboards.widgetForm.orderField.label": "ترتيب العرض",
+  "dashboards.widgetForm.orderField.placeholder": "أدخل ترتيب العرض",
+  "dashboards.widgets.deleteModal.title": "حذف الودجة",
+  "dashboards.widgets.deleteModal.message": "هل أنت متأكد من حذف هذه الودجة؟",
+  "dashboards.widgets.deleteModal.confirm": "حذف",
+  "dashboards.widgets.deleteModal.cancel": "إلغاء",
+  "dashboards.widgets.moveModal.title": "نقل الودجة",
+  "dashboards.widgets.moveModal.message": "اختر لوحة التحكم لنقل هذه الودجة إليها:",
+  "dashboards.widgets.moveModal.confirm": "نقل",
+  "dashboards.widgets.moveModal.cancel": "إلغاء"
 }
