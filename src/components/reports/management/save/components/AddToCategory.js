@@ -8,10 +8,11 @@ import {
   RepeatableField,
   Select,
 } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function AddToCategory({ categories = [] }) {
   const [filterToggle, setFilterToggle] = useState(false);
+  const intl = useIntl();
 
   const categoryOptions = categories.map(category => ({
     label: category.name,
@@ -30,7 +31,10 @@ function AddToCategory({ categories = [] }) {
         }
         name={`${field}`}
         dataOptions={categoryOptions}
-        placeholder="Select category"
+        placeholder={intl.formatMessage({
+          id: 'ui-reports.newReport.saveReportPane.addToCategory.placeholder',
+          defaultMessage: 'Select category'
+        })}
       />
     );
   };
