@@ -7,6 +7,7 @@ import SaveNewReportForm from './SaveNewReportForm';
 import useReportTypes from '../../../../hooks/useReportTypes';
 import useQueryString from '../../../../hooks/useQueryString';
 import useDryQuery from '../../../../hooks/useDryQuery';
+import displayMethodsConfig from '../../../../constants/DisplayMethods';
 
 function SaveNewReportManager({
   showQueryBuilderPane,
@@ -36,15 +37,32 @@ function SaveNewReportManager({
   })) || [];
 
   const onFormSubmit = (values) => {
+    // Transform displayMethods to match backend schema
+    const transformedDisplayMethods = (values.displayMethods || []).map(method => {
+      const methodValue = typeof method === 'string' ? method : method.value;
+      const methodConfig = displayMethodsConfig.find(m => m.value === methodValue);
+      return {
+        name: methodValue,
+        displaySettings: methodConfig?.settings || {}
+      };
+    });
+
+    // Transform authorizedUsers to match backend schema
+    const transformedAuthorizedUsers = (values.authorizedUsers || []).map(user => ({
+      userId: user.id,
+      role: user.role || 'Viewer',
+      permissions: user.permissions || ''
+    }));
+
     mutator.reports.POST({
       name: values.reportName,
       desc: values.reportDesc,
       status: values.reportStatus,
       reportType: values.reportType,
       privacyType: values.privacyType,
-      displayMethods: values.displayMethods,
+      displayMethods: transformedDisplayMethods,
       defaultDisplayMethod: values.defaultDisplayMethod,
-      authorizedUsers: values.authorizedUsers || [],
+      authorizedUsers: transformedAuthorizedUsers,
       queryMetadata: typeof query === 'string' ? JSON.parse(query) : query,
       queryString: {
         sqlCommand: queryString?.replace(/(\r\n|\n|\r|\")/gm, ' '),
@@ -64,13 +82,7 @@ function SaveNewReportManager({
           reportStatus: 'active',
           privacyType: 'public',
           reportType,
-          displayMethods: reportDisplayMethods.map((method) => ({
-            label: intl.formatMessage({
-              id: method.translationKey.id,
-              defaultMessage: method.translationKey.defaultMessage,
-            }),
-            value: method.value,
-          })),
+          displayMethods: reportDisplayMethods.map((method) => method.value),
           defaultDisplayMethod: reportTypeRecord?.defaultDisplayMethod,
           authorizedUsers: [],
           queryMetadata: '',

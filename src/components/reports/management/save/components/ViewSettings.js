@@ -4,7 +4,9 @@ import {
   Accordion,
   FilterAccordionHeader,
   MultiSelection,
-  Select
+  Select,
+  Row,
+  Col
 } from '@folio/stripes/components';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Field } from 'react-final-form';
@@ -29,54 +31,62 @@ function ViewSettings(props) {
         separator
         header={FilterAccordionHeader}
       >
-        <Field
-          id="new-report-displayMethods-multiselect"
-          name="displayMethods"
-          component={MultiSelection}
-          label={
-            <FormattedMessage
-              id="ui-reports.newReport.fields.displayMethods.label"
-              defaultMessage="Display methods"
+        <Row>
+          <Col xs={12}>
+            <Field
+              id="new-report-displayMethods-multiselect"
+              name="displayMethods"
+              component={MultiSelection}
+              label={
+                <FormattedMessage
+                  id="ui-reports.newReport.fields.displayMethods.label"
+                  defaultMessage="Display methods"
+                />
+              }
+              placeholder={intl.formatMessage({
+                id: 'ui-reports.newReport.fields.displayMethods.placeholder',
+                defaultMessage: 'Choose display methods'
+              })}
+              dataOptions={props.reportDisplayMethods.map(method => ({
+                label: intl.formatMessage({
+                  id: method.translationKey.id,
+                  defaultMessage: method.translationKey.defaultMessage
+                }),
+                value: method.value
+              }))}
+              required
+              validate={required}
             />
-          }
-          placeholder={intl.formatMessage({
-            id: 'ui-reports.newReport.fields.displayMethods.placeholder',
-            defaultMessage: 'Choose display methods'
-          })}
-          dataOptions={props.reportDisplayMethods.map(method => ({
-            label: intl.formatMessage({
-              id: method.translationKey.id,
-              defaultMessage: method.translationKey.defaultMessage
-            }),
-            value: method.value
-          }))}
-          required
-          validate={required}
-        />
-        <Field
-          id="new-report-defaultDisplayMethod-select"
-          name="defaultDisplayMethod"
-          component={Select}
-          label={
-            <FormattedMessage
-              id="ui-reports.newReport.fields.defaultDisplayMethod.label"
-              defaultMessage="Default display method"
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <Field
+              id="new-report-defaultDisplayMethod-select"
+              name="defaultDisplayMethod"
+              component={Select}
+              label={
+                <FormattedMessage
+                  id="ui-reports.newReport.fields.defaultDisplayMethod.label"
+                  defaultMessage="Default display method"
+                />
+              }
+              placeholder={intl.formatMessage({
+                id: 'ui-reports.newReport.fields.defaultDisplayMethod.placeholder',
+                defaultMessage: 'Choose default display method'
+              })}
+              dataOptions={props.reportDisplayMethods.map(method => ({
+                label: intl.formatMessage({
+                  id: method.translationKey.id,
+                  defaultMessage: method.translationKey.defaultMessage
+                }),
+                value: method.value
+              }))}
+              required
+              validate={required}
             />
-          }
-          placeholder={intl.formatMessage({
-            id: 'ui-reports.newReport.fields.defaultDisplayMethod.placeholder',
-            defaultMessage: 'Choose default display method'
-          })}
-          dataOptions={props.reportDisplayMethods.map(method => ({
-            label: intl.formatMessage({
-              id: method.translationKey.id,
-              defaultMessage: method.translationKey.defaultMessage
-            }),
-            value: method.value
-          }))}
-          required
-          validate={required}
-        />
+          </Col>
+        </Row>
       </Accordion>
     </>
   );

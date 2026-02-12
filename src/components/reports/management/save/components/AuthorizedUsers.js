@@ -8,20 +8,31 @@ import {
   Card,
   KeyValue,
   Icon,
-  NoValue
+  NoValue,
+  Row,
+  Col,
+  Select
 } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Field } from 'react-final-form';
 import { Pluggable } from '@folio/stripes/core';
 
 function AuthorizedUsers() {
   const [filterToggle, setFilterToggle] = useState(false);
   const [users, setUsers] = useState([]);
+  const intl = useIntl();
+
+  const roleOptions = [
+    { value: 'Owner', label: intl.formatMessage({ id: 'ui-reports.authorizedUsers.role.owner', defaultMessage: 'Owner' }) },
+    { value: 'Admin', label: intl.formatMessage({ id: 'ui-reports.authorizedUsers.role.admin', defaultMessage: 'Admin' }) },
+    { value: 'Editor', label: intl.formatMessage({ id: 'ui-reports.authorizedUsers.role.editor', defaultMessage: 'Editor' }) },
+    { value: 'Viewer', label: intl.formatMessage({ id: 'ui-reports.authorizedUsers.role.viewer', defaultMessage: 'Viewer' }) }
+  ];
 
   const selectUser = (user) => {
     const userExists = users.find(u => u.id === user.id);
     if (!userExists) {
-      const newUsers = [...users, user];
+      const newUsers = [...users, { ...user, role: 'Viewer', permissions: '' }];
       setUsers(newUsers);
     }
   };
@@ -31,26 +42,41 @@ function AuthorizedUsers() {
     setUsers(newUsers);
   };
 
+  const updateUserRole = (userId, role) => {
+    const newUsers = users.map(user => 
+      user.id === userId ? { ...user, role } : user
+    );
+    setUsers(newUsers);
+  };
+
   const renderUser = (user, index) => (
-    <div key={index} style={{ 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center', 
-      padding: '8px 12px', 
-      backgroundColor: '#f5f5f5', 
-      borderRadius: '4px',
-      marginBottom: '4px'
-    }}>
-      <span>
-        {user.personal?.firstName && user.personal?.lastName 
-          ? `${user.personal.firstName} ${user.personal.lastName}` 
-          : user.username || 'Unknown User'
-        }
-      </span>
-      <Button buttonStyle="none" onClick={() => removeUser(user.id)}>
-        <Icon icon="times" />
-      </Button>
-    </div>
+    <Card key={index} style={{ marginBottom: '8px', padding: '12px' }}>
+      <Row>
+        <Col xs={6}>
+          <KeyValue
+            label={<FormattedMessage id="ui-reports.authorizedUsers.userName" defaultMessage="User" />}
+            value={
+              user.personal?.firstName && user.personal?.lastName 
+                ? `${user.personal.firstName} ${user.personal.lastName}` 
+                : user.username || 'Unknown User'
+            }
+          />
+        </Col>
+        <Col xs={5}>
+          <Select
+            label={<FormattedMessage id="ui-reports.authorizedUsers.role" defaultMessage="Role" />}
+            value={user.role || 'Viewer'}
+            dataOptions={roleOptions}
+            onChange={(e) => updateUserRole(user.id, e.target.value)}
+          />
+        </Col>
+        <Col xs={1} style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+          <Button buttonStyle="none" onClick={() => removeUser(user.id)}>
+            <Icon icon="trash" />
+          </Button>
+        </Col>
+      </Row>
+    </Card>
   );
 
   return (
