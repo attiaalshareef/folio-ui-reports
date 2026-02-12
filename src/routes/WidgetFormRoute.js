@@ -5,7 +5,9 @@ import WidgetFormManager from '../components/dashboards/widgetForm/WidgetFormMan
 
 function WidgetFormRoute(props) {
   const handleClose = () => {
-    props.history.push('/reports/dashboards');
+    const pathParts = props.location.pathname.split('/');
+    const dashboardId = pathParts[3];
+    props.history.push(`/reports/dashboards/${dashboardId}`);
   };
 
   return (
