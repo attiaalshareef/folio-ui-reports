@@ -44,7 +44,7 @@ const DashboardsMenu = ({
               selected={currentDashboard?.id === dashboard?.id}
               onClick={() => {
                 setCurrentDashboard(dashboard);
-                history.push(`/reports/dashboards/${dashboard.name}/${dashboard.id}`);
+                history.push(`/reports/dashboards/${dashboard.id}`);
                 toggleDropdown();
               }}
             >

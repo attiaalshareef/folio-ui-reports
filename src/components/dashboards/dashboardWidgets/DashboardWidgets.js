@@ -20,31 +20,28 @@ function DashboardWidgets(props) {
   const [isLoading, setIsLoading] = useState(true);
   const calloutRef = React.useRef();
 
-  // Get dashboard from URL or default
-  const dashboardNameFromUrl = props.location?.pathname?.split('/')[3];
+  // Get dashboard from URL - URL contains only ID now
+  const pathParts = props.location?.pathname?.split('/');
+  const dashboardIdFromUrl = pathParts[3]; // /reports/dashboards/{id}
 
   useEffect(() => {
     setIsLoading(true);
     
-    if (dashboardNameFromUrl && dashboards.length > 0) {
-      // Find dashboard by name from URL
-      const dashboard = dashboards.find(d => d.name === dashboardNameFromUrl);
+    if (dashboardIdFromUrl && dashboards.length > 0) {
+      // Find dashboard by ID from URL
+      const dashboard = dashboards.find(d => d.id === dashboardIdFromUrl);
       if (dashboard) {
         setCurrentDashboard(dashboard);
-        // Update URL with dashboard ID if not present
-        if (!props.location.pathname.includes(dashboard.id)) {
-          props.history.replace(`/reports/dashboards/${dashboard.name}/${dashboard.id}`);
-        }
         setIsLoading(false);
       }
     } else if (defaultDashboard?.defaultDashboard?.configValue && dashboards.length > 0) {
       // Fallback to default dashboard and redirect
       const dashboard = defaultDashboard.defaultDashboard.configValue;
       setCurrentDashboard(dashboard);
-      props.history.replace(`/reports/dashboards/${dashboard.name}/${dashboard.id}`);
+      props.history.replace(`/reports/dashboards/${dashboard.id}`);
       setIsLoading(false);
     }
-  }, [dashboardNameFromUrl, dashboards, defaultDashboard, props.history, props.location.pathname]);
+  }, [dashboardIdFromUrl, dashboards, defaultDashboard, props.history]);
 
   useEffect(() => {
     const allWidgets = (props.resources.widgets || {}).records || [];

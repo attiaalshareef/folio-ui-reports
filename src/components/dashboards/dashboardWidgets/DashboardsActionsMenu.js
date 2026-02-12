@@ -18,17 +18,17 @@ const DashboardsActionsMenu = (props) => {
   };
 
   const getDropdownContent = () => {
+    if (!props.currentDashboard) return null;
+    
     return (
       <MenuSection>
-        {/* <IfPermission perm="ui-reports.create-report"> */}
         <Button
           marginBottom0
           id="dashboards-actions-menu-create-new-btn"
           buttonStyle="dropdownItem"
           to={{
-            pathname: `/reports/dashboards/${props.currentDashboard.name}/widgets/create`,
+            pathname: `/reports/dashboards/${props.currentDashboard.id}/widgets/create`,
           }}
-          // onMouseDown={(e) => e.preventDefault()}
         >
           <Icon icon="plus-sign">
             <FormattedMessage
@@ -37,7 +37,6 @@ const DashboardsActionsMenu = (props) => {
             />
           </Icon>
         </Button>
-        {/* </IfPermission> */}
       </MenuSection>
     );
   };
@@ -72,16 +71,18 @@ const DashboardsActionsMenu = (props) => {
 
   return (
     <>
-      <Dropdown
-        id="dashboards-actionsMenu-dropdown"
-        renderTrigger={renderActionsMenuTrigger}
-        renderMenu={renderActionsMenu}
-        open={dropdownOpen}
-        onToggle={toggleDropdown}
-        placement="bottom-end"
-        relativePosition
-        focusHandlers={{ open: () => null }}
-      />
+      {props.currentDashboard && (
+        <Dropdown
+          id="dashboards-actionsMenu-dropdown"
+          renderTrigger={renderActionsMenuTrigger}
+          renderMenu={renderActionsMenu}
+          open={dropdownOpen}
+          onToggle={toggleDropdown}
+          placement="bottom-end"
+          relativePosition
+          focusHandlers={{ open: () => null }}
+        />
+      )}
     </>
   );
 };
